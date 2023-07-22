@@ -1,0 +1,499 @@
+* TASKS
++ get compiling
+- commit a working snapshot
+- internal keys should be fully qualified
+- remove unused functions
+- cleanup docs
+
+- get tap to reveal working
+  - load :inspect/tap feature
+  - load :inspect/reveal feature
+    - load :reveal plugin
+
+- get open in emacs from reveal working
+
+- debug - message on load feature
+- debug - message on load plugin
+- create linter lint.bumble
+- system - add sequence diagram of lifecycle
+
+- bumble-catch
+
+* REPOS
+yerd/core   ; stable
+yerd/lab    ; in use; hot; under focus; rapid modifications
+yerd/sketch ; partially formed exploration
+
+code moves from sketch to lab to core
+
+* LINT
+  - bumble / bumble-catch
+    - offside violation detected
+    - module
+      - can't bypass api to access a private function
+    - hierarchy DAG
+      - layer can't access higher layer
+      - layer can't access more than one level down (mabye)
+      - layer can't access outside of DAG of lower layers (maybe)
+
+* GLOSSARY
+- project - unique project or company name to use as a namespace prefix
+- module - set of related functions
+           - maybe just using component is sufficient
+- entity - a named thing with a set of related functions
+           - maybe just using component is sufficient
+           - use entity when talking about data and relations
+- component - module or entity with an api
+           - maybe just using component is sufficient
+- domain - convenient related set of concepts to reason about in a discussion
+           contains modules/entities/components
+- namespace - map of <project>.<domain>.<module> onto clojure source file
+- hierarchy - an organization of domains in a layered hierarchy
+              domains in a hierarchy are also called layers or levels
+* ONTOLOGY
+** DOMAIN HIERARCHY
+|-----------+-------------|
+| DOMAIN    | PARENT      |
+| inspect   | tooling     |
+| edit      | tooling     |
+| lint      | tooling     |
+| interface | application |
+| clojure   | ontology    |
+|-----------+-------------|
+
+** NAMESPACE HIERARCHY
+<project>.<domain>.<component>[.<version>]
+<project>.<domain>.<module>[.<version>]
+
+|---------+----------+-----------|
+| PROJECT | DOMAIN   | ENTITY    |
+|---------+----------+-----------|
+| yerd    | app      | plugin    |
+|         |          | CLI       |
+|         | code     | location  |
+|         | clojure  | core      |
+|         |          | namespace |
+|         | edit     | emacs     |
+|         | inspect  | reveal    |
+|         |          | tap       |
+|         | lint     | bumble    |
+|         | ontology |           |
+|         | user     |           |
+|---------+----------+-----------|
+
+* EVENTS
+
+| DOMAIN  | COMPONENT | EVENT | HOOK | PLUGIN |
+| inspect | tap       | Tap   |      | reveal |
+
+;;     - tap/reveal       Tap
+;;     - location/reveal  Tap
+;;     - location/emacs   Open
+
+* DESIGN PRINCIPLES
+- Constructor functions should be named create. New would be nice but it is a special form.
+
+  CONVENTIONS
+  - Use vars to access keywords for better integration with tooling.
+  - For keywords, dot is only allowed in the namespace.
+
+  ENTITIES
+  - location - location in code
+  - tap      - a value to be tapped by the tap macro
+
+* CONTROLLING OTHER PROCESSES FROM HERE
+;; ? can this close and open inspector windows?
+;; ? does it need its own ui?
+;; ? dashboard?
+
+* GOALS
+;; ? hyperfiddle dashboard?
+
+;; What are some high leverage goals?
+;; - make semi auto usable
+;;   - graph
+;; - get my old graphs working (easier to paste)
+;; - integrate tooling
+;;   - splunk
+;;   - flower
+;;     - github
+;;     - jira
+;;     - slack
+;;   - sfdc
+;;   - postgres
+;;   - xtdb
+;;   - fzf
+;; - linters
+;;   - bumble-catch
+;;     - components boundaries
+;;     - layers
+;; - analysis
+;;   - complexity
+;; - inspectors
+;;   - reveal
+;;   - portal
+;;   - flow storm
+;;   - morse
+;;   - rebl
+;; - debux
+;; - dev environment in a box
+;;   - over cli on aws instance
+;;     - can screen record for audit
+;;     - can quickly grant/remove access
+
+* SCRATCH
+** namespace
+  - is it a misdefinition?
+  - too tied to java/filesystem/zip roots
+** entity
+  - aka thing, type, name
+** relation
+  - cardinality
+  - containment
+    - comoponent: encapsulated details at a lower layer of reasoning
+  - membership (in larger group (domain of reasoning))
+    - tags
+  - causality
+    - often implicit in how we model the world but depends on reference frame of the observer
+    - implicit in verbs
+  - unknown / question
+    - bookmark for something unknown (what is? what if? how?)
+    - interesting because of a curiousity, irk, or fear
+      - Shirky: "interestingness"
+    - seems to be its own category of connection that becomes the subject of unconscious background reflection
+      - dreams, showers, walks
+    - ? is this more related to agency?
+    - note: no concept of this in org-mode obsidian
+  - portals
+    - gateway to other (higher/lower/different) domain of reasoning
+      - zoom in and out
+      - change perspective / reference frame
+      - listen
+    - ? how to translate?
+    - ? how to walk in both worlds?
+    - see the matrix
+    - note: no concept of this in org-mode obsidian
+  - anchors
+    - assumed truths, constraints, or boundaries upon which to build or otherwise constrain the solution space
+- ? reference frames?
+- ? arrow of time / entropy?
+    - verbs assume the passage of time
+    - ? how to model causality?
+      - event systems
+      - simulations
+      - gaming
+      - reframe, missionary
+    - ? how does this run on physical substrate?
+- ? what are domains of reasoning?
+  - ? are domains layers?
+    - ? do they have a consistent definition across reference frames?
+  - ? are they trees?
+  - ? how to represent them?
+    - database
+      - use separate schemas
+    - clojure
+      - namespaces are root in filesystem trees
+      - namespaces do not imply nesting in principle but they do in practice (do to being based on files)
+      - namespaces do not handle versioning well
+    - git
+      - hashes are a good base
+      - limited higher level constructs as based on files, lines, branches
+    - datomic/xtdb
+      - EAV, component, reference
+      - no domain
+      - 1/2 time dimensions
+    - org-mode
+      - no domain
+    - codeq
+      - has semantic understanding of language
+    - ipfs
+      - hashes are good
+    - REST
+    - architecture documents
+      - high/low level
+      - how much detail to show
+      - conceptual zoom in/out
+   - ? how to translate to other conceptual frameworks?
+     - ? eastern vs western?
+     - ? dog vs cat?
+   - ? how to cross boundaries?
+     - ? medicine vs engineering vs psychology while in a hospital?
+- domains
+  - are another dimension
+  - not well handled by current languages and data systems
+  - ? how are domains related?
+  - ? how to shift perspectives between domains?
+  - ? how to translate to different conceptual frameworks?
+  - ? how to model in?
+    - clojure
+      - current model:
+        <company>.<domain>.<entity>
+        <company>.<domain>.<subdomain>.<entity>
+      - polylith
+        <company>.<component>
+      - content addressable (hash on schema content)
+        - entity.<hash>
+        - <company>.<domain>.<entity>.<hash>
+          dividend.credit.report.vDxadY
+            - ? what does the version apply to?
+            - ? is the version truly a hash?
+            - if a merkle is used based on all code, it will be constantly changing
+              - it can't be in the file name
+              - data storage needs first class support
+              - editors would need first class support
+              - semantic code is data all the way down
+        - <company>.<domain>.<entity>.<version>
+          dividend.credit.report.v1
+          - limited but
+            - works with existing tooling and filesystems
+            - makes version explicit
+            - dev still has to manage
+              - api, schemas, conversions
+        - ? how to rebuild tooling to work with this?
+          - navigation
+            - with in a domain
+            - between domains
+          - edits
+          - versions
+      - ? how are sub domains mapped onto the filesystem?
+      - ? is it even possible when they can be composed differently depending on the perspective and desired use?
+      - ? better to use an entity hash (on schema?)?
+        - attributes for:
+          - name
+          - version (implicit in hash?)
+        - tags for (1+)
+          - company
+          - domain
+    - database
+      = using content addressing is too foreign to sql tooling
+      - <domain>.<entity>_<version>
+        - company is implied
+        credit.report_v1
+      -? how should the version be stored?
+        - ? table name?
+        - ? table column?
+    - datalog/xtdb
+      - flexible EAV model helps with versions
+      - domain can be a tag
+      - company can be a tag
+      - version can be an attribute
+      - content addressing is not first class
+- content addressable storage
+  - globally unique
+  - distributed
+  - immutable
+  - fast lookup based on entire data
+  - audit if document is present based on hash without passing the actual data
+  - optimized storage, caching, retrieval of structures
+  - https://en.wikipedia.org/wiki/Content-addressable_storage
+    - precedent for storage used in sarbanes-oxley
+- physics
+  - reference frames
+  - block universe model
+  - entropy
+  - emergence
+
+filing cabinet:
+filesystem:
+zip file:
+java: packages, classes
+clojure: namespace, symbols, keywords
+datomic:
+git:
+dns:
+ipfs:
+bork:
+
+Ontology
+- name: word for a related group of attributes that evokes meaning
+-
+- content addressable hashes are the way
+
+fine/course graining
+nesting
+layering
+domains
+simplifying complexity by mapping/categorizing/grouping a set of fine grained details into a smaller set of higher level concepts
+
+Complexity Theory
+Emergence
+Qualia
+
+** namespace structure
+<company>.<domain>.<entity>.<version>
+<company>.<domain>.<module>.<version>
+<company>.<domain>.<component>.<version>
+- a library is just its own domain
+  - versioned
+  - references other domains (with their own versions)
+
+- a namespace combines all the segments
+- a module
+  - is just a set of functions
+  - higher meanings can be derived
+    - entity
+    - polylith component
+- a domain is a set or related concepts
+  - useful for discussion and reasoning
+  - a basis for a topic of conversation
+  - can exist outside of a hierarchy
+  - can also be nested in a hierarchy (layer or level)
+- a hierarchy
+  - organizes domains into levels or layers
+
+-? what is a word for a related set of functions?
+  - module
+    - could be module (or component) or entity
+  - component
+    -
+  - namespace
+    - applies to each segment and also the whole
+  - artifact
+  - mathematics
+    - family of functions
+  - philosophy
+    - category
+
+what are the possible yerd libraries
+
+yerd.
+  - domain / entity / ontology
+    - ? is this too meta?
+    - map domain/entity concepts on to namespace/symbol/keyword/file
+  - plug
+  - tap
+  - cog
+    - ? name?
+      - is really a component linter
+        - checks for namespace violations
+      - lower level component of domain
+- ? how to describe the relations between layers?
+
+yerd.ontology.clojure
+yerd.application.plugin
+
+
+- linter names
+  - linesman
+  - sideline
+  - offside
+  - cross
+  - boundary
+  - transgression
+  - breach
+  - trespass
+  - deviate
+  - deviant
+  - anomaly
+  - nominal / anomalous
+  - fence
+  - touchline
+  - hawk-eye (line calling system)
+
+-? what is a layer violation?
+   - lower should not call higher
+   - higher should not call > 1 level lower
+     - maybe a DAG is needed
+-? is layer a better name than domain?
+   - implies a hierarchy
+
+- ? what should the repo be called?
+yerd/core   ; stable
+yerd/lab    ; in use; hot; under focus; rapid modifications
+yerd/sketch ; partially formed exploration
+
+- yerd.ontology.x
+  - core
+  - clojure
+  - entity
+
+- ? how to handle CLI?
+  - ? part of application domain?
+  - ? is application part of api?
+  - plugin - a dynamic api to include libraries
+    - in another library
+    - in an application
+  - ? is interface a domain category?
+    - user
+      - desktop
+      - phone
+      - web
+      - terminal
+      - vr headseat
+      - speaker
+      - microphone
+      - screen
+      - camera
+    - program
+      - process (cli)
+      - socket
+  - an interface has to do with boundaries and surface area
+  - an interface has to do with concretions
+  - concepts do not have interfaces
+- these domain concepts do not need to be anchored
+  - they are relative to the observer and use case
+  - they evolve over time (based on lessons learned, changing environment or goals)
+  - there are multiple valid frameworks
+  - deeper inspection always yields more (within the limits of knowledge or capability)
+
+- cog
+  - ? what name?
+    - ? component vs entity?
+    - ? access vs assembly?
+      - cog is not good as it implies assembly instead of access
+  -? what is a word for gently correcting cross domain conceptual access?
+     - ? are you sure that is what you want?
+     - a wizard arrives precisely when he means to
+     - conflation warning (thinking two concepts fall in the same domain)
+     - complexion warning (complicating by intertwining concepts from two domains)
+     - incidental warning (jumping through hoops that should not exist)
+  - ? what does it do?
+    - lints mapping of domain concepts onto clojure namespaces
+    - lints concretions
+  = mason - warn before setting things in stone
+
+lint - good
+lsp - bad word
+kondo - ??
+
+- what do linters look for
+  - clean vs dirty
+  - simple vs complex
+  - convention vs exploration
+  - order vs chaos
+- what do linters not look for:
+  - pretty vs ugly (aesthetics are for humans; no accounting for taste)
+  - clear vs ambiguous (semantics are for humans)
+
+- ? are entities building blocks?
+  - the word component makes sense in the context of assembly
+  - not everything is assembly so the metaphor is overly constraining
+  - polylith is about assembling blocks into libs, apps, or apis.
+- ? how to convert conceptual domains of reasoning into concretions?
+  - domains and entities into libs, apis, and apps
+    - the surface area of those (seam/api/ux) typically work with concepts in a single domain so should be naturally aligned
+    - it is important to have a glossary for the domain (developers, end users, company, industry)
+  - e.g., cli script for cog
+
+- ? what is a better name for component model?
+  - domain model
+
+terms for conceptual framework
+terms for data model
+terms for program implementation
+
+? where to map domain nesting and relationships?
+? where do the boundaries get crossed?
+
+? what is a component?
+  -? how is a polylith component different than an entity?
+     - no difference
+  -? do all namespaces have to be entities?
+     - code is data
+     - util is just a set of functions with no data attributes in common
+       - this is ok (null entity? fn group entity? default entity?)
+       - as soon as there is a set of attributes to which more than one function applies this gets factored out to be an entity
+     - there is an entity called "clojure" which is embodied in clojure.core
+     - entities (things) are principle in data modeling and the functions just manipulate those
+       - i.e., you start with a thing and then ask what can I do with this?
+       - this is like math as well
