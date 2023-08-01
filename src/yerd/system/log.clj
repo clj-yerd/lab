@@ -1,23 +1,15 @@
-(ns yerd.system.log)
+(ns yerd.system.log
+  (:require
+   [taoensso.timbre :as timbre]))
 
-(def debug?
-  "Atom that contols tapping of debug messages."
-  (atom false))
+(defmacro debug
+  [& args]
+  `(timbre/debug ~@args))
 
-;; toggle by tag and level
-(defn debug-toggle!
-  "Toggle the `debug?` atom."
-  []
-  (swap! debug? not))
-#_ (debug-toggle!)
+(defmacro info
+  [& args]
+  `(timbre/info ~@args))
 
-;; ? how to pass a tag?
-;; ns
-;; :plugin
-;; :emacs
-;; :reveal
-(defn debug
-  "Tap a debug message if `debug?`is true."
-  [x]
-  (when @debug?
-    (tap> x)))
+(defn cli-output
+  [& args]
+  (prn args))
